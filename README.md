@@ -173,6 +173,33 @@ streamlit run app.py
 
 Open the displayed URL (typically http://localhost:8501).
 
+## Project Walkthrough
+
+The project is organized as a 5-notebook story that takes you from raw data to a working predictive-maintenance application. Each notebook has a clear purpose and builds on the previous one.
+
+| Notebook | Purpose | Key Questions Answered |
+|----------|---------|------------------------|
+| **01_problem_and_data.ipynb** | Problem definition & data understanding | What are we predicting? How imbalanced is the target? Which columns leak? |
+| **02_exploratory_analysis.ipynb** | EDA — operating conditions vs. failures | Which features differ between failed/healthy machines? What do failure modes tell us? |
+| **03_modeling_and_tuning.ipynb** | Model training & hyperparameter tuning | Which model works best? What are the tuned hyperparameters? Why recall as primary metric? |
+| **04_evaluation_and_interpretation.ipynb** | Deep evaluation of final model | How good is it really? What threshold to use? What drives predictions? Where does it fail? |
+| **05_final_pipeline_and_predictions.ipynb** | Production pipeline & app connection | How to load the saved model? Make single/batch predictions? Connect to Streamlit app? |
+
+**Run order**: Start with 01, follow through to 05. Each notebook imports reusable functions from `src/` — no duplicated logic.
+
+### Quick Start with Notebooks
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Run training (generates model + results)
+python src/train.py
+
+# 3. Open notebooks in order
+jupyter notebook notebooks/
+```
+
 ## Project Structure
 
 ```
@@ -192,6 +219,12 @@ predictive-maintenance/
 │   ├── precision_recall_curve.png
 │   ├── threshold_analysis.png
 │   └── feature_importance.png
+├── notebooks/                 # 5-notebook story
+│   ├── 01_problem_and_data.ipynb
+│   ├── 02_exploratory_analysis.ipynb
+│   ├── 03_modeling_and_tuning.ipynb
+│   ├── 04_evaluation_and_interpretation.ipynb
+│   └── 05_final_pipeline_and_predictions.ipynb
 ├── src/
 │   ├── data.py               # Data loading
 │   ├── preprocessing.py      # Preprocessing pipeline
@@ -202,8 +235,6 @@ predictive-maintenance/
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
-└── notebooks/
-    └── exploration.ipynb     # Optional exploration notebook
 ```
 
 ## Dashboard Pages
