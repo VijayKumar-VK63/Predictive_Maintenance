@@ -208,8 +208,16 @@ def train_models(
     # Model comparison table
     comparison_rows = []
     for name, res in test_results.items():
-        row = {"Model": name}
-        row.update(res["metrics"])
+        m = res["metrics"]
+        row = {
+            "Model": name,
+            "Accuracy": m["accuracy"],
+            "Precision": m["precision"],
+            "Recall": m["recall"],
+            "F1": m["f1"],
+            "ROC-AUC": m["roc_auc"],
+            "PR-AUC": m["pr_auc"],
+        }
         comparison_rows.append(row)
 
     comparison_df = pd.DataFrame(comparison_rows)
@@ -219,7 +227,7 @@ def train_models(
     print(comparison_df.to_string(index=False))
 
     # Select best model based on recall (primary) then F1
-    best_model_name = comparison_df.sort_values(["recall", "f1"], ascending=False).iloc[0]["Model"]
+    best_model_name = comparison_df.sort_values(["Recall", "F1"], ascending=False).iloc[0]["Model"]
     print(f"\nSelected best model: {best_model_name}")
 
     best_estimator = best_estimators[best_model_name]
@@ -300,6 +308,7 @@ def train_models(
         plt.close()
 
     # Save training summary
+    m = best_test_result["metrics"]
     summary = {
         "dataset_shape": list(X.shape),
         "target_distribution": y.value_counts().to_dict(),
@@ -312,7 +321,14 @@ def train_models(
         "best_model": best_model_name,
         "best_model_cv_params": cv_results[best_model_name]["best_params"],
         "best_model_cv_score": cv_results[best_model_name]["best_cv_score"],
-        "test_metrics": best_test_result["metrics"],
+        "test_metrics": {
+            "Accuracy": m["accuracy"],
+            "Precision": m["precision"],
+            "Recall": m["recall"],
+            "F1": m["f1"],
+            "ROC-AUC": m["roc_auc"],
+            "PR-AUC": m["pr_auc"],
+        },
         "selected_threshold_f1": best_test_result["best_threshold_f1"],
         "selected_threshold_recall_80": best_test_result["best_threshold_recall_80"],
     }

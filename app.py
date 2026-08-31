@@ -34,7 +34,20 @@ def load_results():
     """Load training results and metrics."""
     results = {}
     if (RESULTS_DIR / "model_comparison.csv").exists():
-        results["comparison"] = pd.read_csv(RESULTS_DIR / "model_comparison.csv")
+        df = pd.read_csv(RESULTS_DIR / "model_comparison.csv")
+        # Normalize column names to capitalized format for display
+        col_map = {
+            "accuracy": "Accuracy",
+            "precision": "Precision",
+            "recall": "Recall",
+            "f1": "F1",
+            "roc_auc": "ROC-AUC",
+            "roc-auc": "ROC-AUC",
+            "pr_auc": "PR-AUC",
+            "pr-auc": "PR-AUC",
+        }
+        df = df.rename(columns=col_map)
+        results["comparison"] = df
     if (RESULTS_DIR / "test_metrics.json").exists():
         with open(RESULTS_DIR / "test_metrics.json") as f:
             results["test_metrics"] = json.load(f)
@@ -61,6 +74,10 @@ def render_kpi_cards(results):
     summary = results.get("summary", {})
     test_metrics = results.get("test_metrics", {})
 
+    # Support both lowercase (test_metrics.json) and capitalized (training_summary.json) keys
+    def get_metric(d, key):
+        return d.get(key) or d.get(key.capitalize()) or d.get(key.upper()) or 0
+
     col1, col2, col3, col4, col5, col6 = st.columns(6)
 
     with col1:
@@ -74,9 +91,9 @@ def render_kpi_cards(results):
     with col4:
         st.metric("Best Model", summary.get("best_model", "N/A"))
     with col5:
-        st.metric("Test Recall", f"{test_metrics.get('recall', 0):.3f}")
+        st.metric("Test Recall", f"{get_metric(test_metrics, 'recall'):.3f}")
     with col6:
-        st.metric("Test F1", f"{test_metrics.get('f1', 0):.3f}")
+        st.metric("Test F1", f"{get_metric(test_metrics, 'f1'):.3f}")
 
 
 def page_overview(df, results):

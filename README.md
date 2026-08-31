@@ -117,9 +117,14 @@ Models compared on **test set** using multiple metrics:
 
 | Model | Accuracy | Precision | Recall | F1 | ROC-AUC | PR-AUC |
 |-------|----------|-----------|--------|-----|---------|--------|
-| (results populated after training) | | | | | | |
+| Logistic Regression | 0.8230 | 0.1389 | 0.8088 | 0.2371 | 0.9066 | 0.3805 |
+| Decision Tree | 0.9300 | 0.3125 | 0.8824 | 0.4615 | 0.9083 | 0.5322 |
+| Random Forest | 0.9350 | 0.3315 | 0.8971 | 0.4841 | 0.9575 | 0.5921 |
+| Gradient Boosting | 0.9855 | 0.8421 | 0.7059 | 0.7680 | 0.9565 | 0.8248 |
 
 **Selection criterion**: Highest recall, then highest F1. Not highest accuracy.
+
+Random Forest was selected because it achieved the strongest recall (0.897) while maintaining a reasonable F1 score (0.484). Recall was given more importance because a missed machine failure is more concerning than an additional false alarm. Gradient Boosting had higher accuracy and precision but lower recall, meaning it would miss more actual failures — the wrong trade-off for predictive maintenance.
 
 ### Threshold Selection
 

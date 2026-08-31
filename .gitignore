@@ -5,11 +5,13 @@ data/*.csv
 # Models
 models/*.joblib
 models/*.pkl
+!models/.gitkeep
 
 # Results
 results/*.csv
 results/*.json
 results/*.png
+!results/.gitkeep
 
 # Python
 __pycache__/
