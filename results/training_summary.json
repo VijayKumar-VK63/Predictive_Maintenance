@@ -1,0 +1,40 @@
+{
+  "dataset_shape": [
+    10000,
+    6
+  ],
+  "target_distribution": {
+    "0": 9661,
+    "1": 339
+  },
+  "train_size": 8000,
+  "test_size": 2000,
+  "random_seed": 42,
+  "cv_folds": 5,
+  "scoring": "recall",
+  "models_tested": [
+    "Logistic Regression",
+    "Decision Tree",
+    "Random Forest",
+    "Gradient Boosting"
+  ],
+  "best_model": "Random Forest",
+  "best_model_cv_params": {
+    "clf__max_depth": 5,
+    "clf__max_features": "sqrt",
+    "clf__min_samples_leaf": 2,
+    "clf__min_samples_split": 2,
+    "clf__n_estimators": 200
+  },
+  "best_model_cv_score": 0.8487542087542087,
+  "test_metrics": {
+    "Accuracy": 0.935,
+    "Precision": 0.33152173913043476,
+    "Recall": 0.8970588235294118,
+    "F1": 0.48412698412698413,
+    "ROC-AUC": 0.9575264888564121,
+    "PR-AUC": 0.5920770347078633
+  },
+  "selected_threshold_f1": 0.66,
+  "selected_threshold_recall_80": 0.5800000000000001
+}

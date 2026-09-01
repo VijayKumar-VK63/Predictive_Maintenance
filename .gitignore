@@ -1,17 +1,31 @@
-# Data
-data/*.csv
-!data/.gitkeep
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Models
-models/*.joblib
-models/*.pkl
-!models/.gitkeep
+# Virtual environments
+venv/
+env/
+.venv/
 
-# Results
-results/*.csv
-results/*.json
-results/*.png
-!results/.gitkeep
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Streamlit
+.streamlit/
 
 # Python
 __pycache__/

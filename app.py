@@ -78,15 +78,19 @@ def render_kpi_cards(results):
     def get_metric(d, key):
         return d.get(key) or d.get(key.capitalize()) or d.get(key.upper()) or 0
 
+    # target_distribution in JSON has string keys ("0", "1")
+    target_dist = summary.get("target_distribution", {})
+    fail_count = target_dist.get("1", target_dist.get(1, 0))
+    total_records = summary.get('dataset_shape', [0])[0]
+
     col1, col2, col3, col4, col5, col6 = st.columns(6)
 
     with col1:
-        st.metric("Total Records", f"{summary.get('dataset_shape', [0])[0]:,}")
+        st.metric("Total Records", f"{total_records:,}")
     with col2:
-        fail_count = summary.get("target_distribution", {}).get(1, 0)
         st.metric("Failure Cases", f"{fail_count:,}")
     with col3:
-        fail_rate = summary.get("target_distribution", {}).get(1, 0) / summary.get("dataset_shape", [1])[0]
+        fail_rate = fail_count / total_records if total_records else 0
         st.metric("Failure Rate", f"{fail_rate:.2%}")
     with col4:
         st.metric("Best Model", summary.get("best_model", "N/A"))
@@ -605,11 +609,16 @@ def main():
     st.sidebar.markdown("---")
     st.sidebar.subheader("Project Info")
     summary = results.get("summary", {})
+    test_metrics = results.get("test_metrics", {})
+    
+    def get_metric(d, key):
+        return d.get(key) or d.get(key.capitalize()) or d.get(key.upper()) or 0
+    
     if summary:
         st.sidebar.write(f"**Best Model:** {summary.get('best_model', 'N/A')}")
-        st.sidebar.write(f"**Test Recall:** {summary.get('test_metrics', {}).get('recall', 0):.3f}")
-        st.sidebar.write(f"**Test F1:** {summary.get('test_metrics', {}).get('f1', 0):.3f}")
-        st.sidebar.write(f"**ROC-AUC:** {summary.get('test_metrics', {}).get('roc_auc', 0):.3f}")
+        st.sidebar.write(f"**Test Recall:** {get_metric(test_metrics, 'recall'):.3f}")
+        st.sidebar.write(f"**Test F1:** {get_metric(test_metrics, 'f1'):.3f}")
+        st.sidebar.write(f"**ROC-AUC:** {get_metric(test_metrics, 'roc_auc'):.3f}")
 
     st.sidebar.markdown("---")
     st.sidebar.caption("Built with Streamlit, scikit-learn, Plotly")
